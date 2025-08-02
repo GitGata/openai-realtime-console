@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
+import pkg from 'react-feather';
+const { 
   BarChart3, 
   CheckSquare, 
   MessageCircle, 
@@ -10,7 +11,7 @@ import {
   Users,
   Clock,
   TrendingUp
-} from 'react-feather';
+} = pkg;
 
 export default function Home() {
   const { user } = useAuth();

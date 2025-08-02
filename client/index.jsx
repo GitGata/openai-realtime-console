@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, MemoryRouter } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
@@ -12,10 +12,14 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
 
-export default function App() {
+export default function App({ url }) {
+  // Use MemoryRouter for SSR, BrowserRouter for client
+  const RouterComponent = typeof window === 'undefined' ? MemoryRouter : Router;
+  const routerProps = typeof window === 'undefined' ? { initialEntries: [url || '/'] } : {};
+
   return (
     <AuthProvider>
-      <Router>
+      <RouterComponent {...routerProps}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -29,7 +33,7 @@ export default function App() {
             <Route path="profile" element={<Profile />} />
           </Route>
         </Routes>
-      </Router>
+      </RouterComponent>
     </AuthProvider>
   );
 }

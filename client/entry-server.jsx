@@ -1,14 +1,8 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom/server';
-import App from './index.js';
+import App from './index.jsx';
 
 export function render(url) {
-  const html = renderToString(
-    <StaticRouter location={url}>
-      <App />
-    </StaticRouter>
-  );
-  
+  const html = renderToString(<App url={url} />);
   return { html };
 }

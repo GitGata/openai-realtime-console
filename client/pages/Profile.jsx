@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, Mail, Edit3, Save, X } from 'react-feather';
+import pkg from 'react-feather';
+const { User, Mail, Edit3, Save, X } = pkg;
 
 export default function Profile() {
   const { user, api } = useAuth();

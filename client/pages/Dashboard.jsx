@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { 
+import pkg from 'react-feather';
+const { 
   Users, 
   CheckSquare, 
   FileText, 
@@ -9,7 +10,7 @@ import {
   TrendingDown,
   Clock,
   Activity
-} from 'react-feather';
+} = pkg;
 
 export default function Dashboard() {
   const { api } = useAuth();

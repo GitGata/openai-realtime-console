@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { 
+import pkg from 'react-feather';
+const { 
   Plus, 
   Edit3, 
   Trash2, 
@@ -10,7 +11,7 @@ import {
   Filter,
   Search,
   Calendar
-} from 'react-feather';
+} = pkg;
 
 export default function Tasks() {
   const { api, user } = useAuth();

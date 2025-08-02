@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
+import pkg from 'react-feather';
+const { 
   Home, 
   BarChart3, 
   CheckSquare, 
@@ -12,7 +13,7 @@ import {
   LogOut, 
   Menu,
   X
-} from 'react-feather';
+} = pkg;
 
 export default function Layout() {
   const { user, isAuthenticated, loading, logout } = useAuth();

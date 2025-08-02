@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Send, Users, Hash } from 'react-feather';
+import pkg from 'react-feather';
+const { Send, Users, Hash } = pkg;
 import io from 'socket.io-client';
 
 export default function Chat() {

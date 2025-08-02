@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Upload, Download, File, Trash2, Eye, Search } from 'react-feather';
+import pkg from 'react-feather';
+const { Upload, Download, File, Trash2, Eye, Search } = pkg;
 
 export default function Files() {
   const { api } = useAuth();

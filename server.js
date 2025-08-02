@@ -427,9 +427,9 @@ app.use("*", async (req, res, next) => {
       url,
       fs.readFileSync("./client/index.html", "utf-8"),
     );
-    const { render } = await vite.ssrLoadModule("./client/entry-server.jsx");
-    const appHtml = await render(url);
-    const html = template.replace(`<!--ssr-outlet-->`, appHtml?.html);
+    
+    // For now, disable SSR and just send the empty template
+    const html = template.replace(`<!--ssr-outlet-->`, '');
     res.status(200).set({ "Content-Type": "text/html" }).end(html);
   } catch (e) {
     vite.ssrFixStacktrace(e);

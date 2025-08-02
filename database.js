@@ -1,5 +1,4 @@
 import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
 import bcrypt from 'bcryptjs';
 
 let db = null;
@@ -7,16 +6,63 @@ let db = null;
 export async function initDatabase() {
   if (db) return db;
 
-  db = await open({
-    filename: './database.sqlite',
-    driver: sqlite3.Database
+  // Create database using sqlite3 directly
+  const database = await new Promise((resolve, reject) => {
+    const dbInstance = new sqlite3.Database('./database.sqlite', (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(dbInstance);
+      }
+    });
   });
 
+  // Create wrapper object with promise-based methods
+  db = {
+    _db: database,
+    
+    get: (sql, params = []) => {
+      return new Promise((resolve, reject) => {
+        database.get(sql, params, (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        });
+      });
+    },
+
+    all: (sql, params = []) => {
+      return new Promise((resolve, reject) => {
+        database.all(sql, params, (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        });
+      });
+    },
+
+    run: (sql, params = []) => {
+      return new Promise((resolve, reject) => {
+        database.run(sql, params, function(err) {
+          if (err) reject(err);
+          else resolve({ lastID: this.lastID, changes: this.changes });
+        });
+      });
+    },
+
+    close: () => {
+      return new Promise((resolve, reject) => {
+        database.close((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+    }
+  };
+
   // Enable foreign keys
-  await db.exec('PRAGMA foreign_keys = ON');
+  await db.run('PRAGMA foreign_keys = ON');
 
   // Create users table
-  await db.exec(`
+  await db.run(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
@@ -32,7 +78,7 @@ export async function initDatabase() {
   `);
 
   // Create tasks table
-  await db.exec(`
+  await db.run(`
     CREATE TABLE IF NOT EXISTS tasks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
@@ -51,7 +97,7 @@ export async function initDatabase() {
   `);
 
   // Create files table
-  await db.exec(`
+  await db.run(`
     CREATE TABLE IF NOT EXISTS files (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       filename TEXT NOT NULL,
@@ -68,7 +114,7 @@ export async function initDatabase() {
   `);
 
   // Create chat messages table
-  await db.exec(`
+  await db.run(`
     CREATE TABLE IF NOT EXISTS chat_messages (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       message TEXT NOT NULL,
@@ -82,7 +128,7 @@ export async function initDatabase() {
   `);
 
   // Create AI conversations table
-  await db.exec(`
+  await db.run(`
     CREATE TABLE IF NOT EXISTS ai_conversations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,

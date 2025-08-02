@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, Eye, EyeOff } from 'react-feather';
+import pkg from 'react-feather';
+const { LogIn, Eye, EyeOff } = pkg;
 
 export default function Login() {
   const { login, isAuthenticated, loading } = useAuth();
